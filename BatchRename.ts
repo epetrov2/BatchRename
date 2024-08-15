@@ -48,8 +48,9 @@ fs.readdirSync(rootFolder, { recursive: true }).forEach((file: any) => {
         }
       }
       newPath = convertedPath + pad(counter, 2) + ".jpg";
-      if (newPath.includes(" ")) console.log("! " + newPath + " - space");
-      else {
+      //if (newPath.includes(" ")) console.log("! " + newPath + " - space");
+      while (newPath.includes(" ")) newPath = newPath.substring(0,newPath.indexOf(' ')) + newPath.substring(newPath.indexOf(' ')+1);
+      {
         let nonLatin = false;
         for (const c of newPath) {
           if (c > "z") {
