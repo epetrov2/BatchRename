@@ -23,31 +23,49 @@ const rootFolder = '';
 
 let lastPath = '';
 let counter = 1;
-let newPath = '';
-let convertedPath = '';
-console.log(fs.readdirSync(rootFolder, { recursive: true }).forEach((file: any) => {
-    let fileName: string = file;
-    fileName = fileName.toLowerCase();
+let newPath = "";
+let convertedPath = "";
 
-    if (fileName.endsWith('.jpg')) {
-        console.log(fileName);
-        const thisPath = fileName.substring(0, fileName.lastIndexOf('\\'));
-        if (lastPath === thisPath) {
-            counter++;
-        } else {
-            counter = 1;
-            lastPath = thisPath;
-            let path = fileName.split('\\');
-            convertedPath = '';
-            for (let i = 0; i < path.length - 1; i++) {
-                let ch = map.get(path[i]);
-                if (ch === undefined) ch = path[i];
-                convertedPath += ch + '-';
-            }
+fs.readdirSync(rootFolder, { recursive: true }).forEach((file: any) => {
+  let fileName: string = file;
+  fileName = fileName.toLowerCase();
+
+  if (fileName.endsWith(".jpg")) {
+    const thisPath = fileName.substring(0, fileName.lastIndexOf("\\"));
+    if (thisPath !== "") {
+      console.log("i " + fileName);
+      if (lastPath === thisPath) {
+        counter++;
+      } else {
+        counter = 1;
+        lastPath = thisPath;
+        let path = fileName.split("\\");
+        convertedPath = "";
+        for (let i = 0; i < path.length - 1; i++) {
+          let ch = map.get(path[i]);
+          if (ch === undefined) ch = path[i];
+          convertedPath += ch + "-";
         }
-        newPath = convertedPath + pad(counter, 2) + ".jpg";
-        console.log(newPath);
-        fs.renameSync(rootFolder + "\\" + fileName, rootFolder + "\\" + newPath);
+      }
+      newPath = convertedPath + pad(counter, 2) + ".jpg";
+      if (newPath.includes(" ")) console.log("! " + newPath + " - space");
+      else {
+        let nonLatin = false;
+        for (const c of newPath) {
+          if (c > "z") {
+            console.log("! " + newPath + " - non-latin char");
+            nonLatin = true;
+            break;
+          }
+        }
+        if (!nonLatin) {
+          console.log("o " + newPath);
+          fs.renameSync(
+            rootFolder + "\\" + fileName,
+            rootFolder + "\\" + newPath
+          );
+        }
+      }
     }
-}));
-
+  }
+});
