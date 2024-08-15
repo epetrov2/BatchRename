@@ -1,9 +1,11 @@
 import * as fs from 'fs';
 
-const words: string[] = fs.readFileSync('./Dictionary.csv', 'utf-8').split('\r\n');
+const words: string[] = fs
+    .readFileSync('./Dictionary.csv', 'utf-8')
+    .split('\r\n');
 console.log(words);
 
-let map = new  Map<string, string>();
+let map = new Map<string, string>();
 words.forEach((element: string) => {
     if (words.length > 0) {
         let tuple = element.split(';');
@@ -26,7 +28,7 @@ let convertedPath = '';
 console.log(fs.readdirSync(rootFolder, { recursive: true }).forEach((file: any) => {
     let fileName: string = file;
     fileName = fileName.toLowerCase();
-    
+
     if (fileName.endsWith('.jpg')) {
         console.log(fileName);
         const thisPath = fileName.substring(0, fileName.lastIndexOf('\\'));
